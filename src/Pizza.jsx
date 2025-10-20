@@ -1,6 +1,6 @@
 function Pizza({ name, image, price, description }) {
   return (
-    <div className="bg-white rounded-lg m-4 shadow-md p-4 max-w-xs mx-auto flex flex-col items-center">
+    <div className="bg-white rounded-lg m-4 shadow-md p-4 max-w-xs mx-auto flex w-xl flex-col items-center">
       <img
         src={image}
         alt={name}
