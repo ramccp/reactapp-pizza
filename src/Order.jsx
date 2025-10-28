@@ -1,8 +1,9 @@
 import Pizza from "./Pizza";
+import { useState } from "react";
 
 function Order() {
-    const pizzaType = "Pepperoni";
-    const pizzaSize = "L";
+    const [pizzaType, setPizzaType] = useState("Pepperoni");
+    const [pizzaSize, setPizzaSize] = useState("L");
 
     return (
         <div className="container mx-auto">
@@ -11,7 +12,7 @@ function Order() {
                 <div className="flex flex-col items-center justify-center gap-4">
                     <div className="flex flex-col items-center my-4">
                         <label htmlFor="pizza-type" className="text-lg font-bold">Pizza Type</label>
-                        <select id="pizza-type" value={pizzaType} className="w-full p-2 rounded-md cursor-pointer ring-1 ring-gray-300 px-10 mt-4">
+                        <select onChange={(e)=>setPizzaType(e.target.value)} id="pizza-type" value={pizzaType} className="w-full p-2 rounded-md cursor-pointer ring-1 ring-gray-300 px-10 mt-4">
                             <option value="Pepperoni">Pepperoni Pizza</option>
                             <option value="Hawaiian">Hawaiian Pizza</option>
                             <option value="Big Meat">Big Meat Pizza</option>
@@ -26,6 +27,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-s"
                                     value="S"
+                                    onClick={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Small</label>
                             </span>
@@ -35,6 +37,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-m"
                                     value="M"
+                                    onClick={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Medium</label>
                             </span>
@@ -44,6 +47,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-l"
                                     value="L"
+                                    onClick={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Large</label>
                             </span>
@@ -54,10 +58,11 @@ function Order() {
                 <div className="flex flex-row items-center justify-center gap-4 my-4">
                     <div className="flex flex-col items-center justify-center gap-4 bg-gray-100 p-4 rounded-md">
                         <Pizza
-                            name="Pepperoni Pizza"
+                            name={pizzaType}
                             image={`/public/pizzas/pepperoni.webp`}
                             description="Mozzarella Cheese, Pepperoni"
                         />
+                        <p className="text-lg font-bold text-center">Pizza Size: {pizzaSize==="S" ? "Small" : pizzaSize==="M" ? "Medium" : "Large"}</p>
                         <p className="text-lg font-bold text-center">Total: $10</p>
                     </div>
                 </div>
