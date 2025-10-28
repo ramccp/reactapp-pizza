@@ -1,12 +1,13 @@
 import { createRoot } from "react-dom/client";
 import Pizza from "./Pizza";
+import Order from "./Order";
 import "./index.css";
 
 const App = () => {
   return (
     <div>
       <h1 className="logo text-center font-bold text-5xl my-5">CAT Pizzeria</h1>
-      <div className="flex gap-4 flex-wrap">
+      {/* <div className="flex gap-4 flex-wrap">
         <Pizza
           name="Pepperoni"
           description="Mozzarella Cheese, Pepperoni"
@@ -22,7 +23,8 @@ const App = () => {
           description="Bacon, Pepperoni, Italian Sausage, Chorizo Sausage"
           image={"/public/pizzas/big_meat.webp"}
         />
-      </div>
+      </div> */}
+      <Order />
     </div>
   );
 };
