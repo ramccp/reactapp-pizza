@@ -1,9 +1,40 @@
 import Pizza from "./Pizza";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const intl = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+});
 
 function Order() {
     const [pizzaType, setPizzaType] = useState("Pepperoni");
     const [pizzaSize, setPizzaSize] = useState("L");
+    const [pizzas, setPizzas] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    let price,selectedPizza;
+
+    if(!loading){
+        selectedPizza = pizzas.find(pizza=>pizza.id===pizzaType);
+        // price = selectedPizza[pizzaSize];
+    }
+
+    console.log(pizzas);
+
+    async function getData(){
+        const response = await fetch(`/api/pizzas/`);
+        const data = await response.json();
+        setPizzas(data);
+    }
+
+    useEffect(()=>{
+        setLoading(true);
+        getData();
+    }, []);
+
+    useEffect(()=>{
+        setLoading(false);
+    }, [pizzas]);
 
     return (
         <div className="container mx-auto">
@@ -13,9 +44,7 @@ function Order() {
                     <div className="flex flex-col items-center my-4">
                         <label htmlFor="pizza-type" className="text-lg font-bold">Pizza Type</label>
                         <select onChange={(e)=>setPizzaType(e.target.value)} id="pizza-type" value={pizzaType} className="w-full p-2 rounded-md cursor-pointer ring-1 ring-gray-300 px-10 mt-4">
-                            <option value="Pepperoni">Pepperoni Pizza</option>
-                            <option value="Hawaiian">Hawaiian Pizza</option>
-                            <option value="Big Meat">Big Meat Pizza</option>
+                            {pizzas.map(obj=><option key={obj.id} value={obj.id}>{obj.name}</option>)}
                         </select>
                     </div>
                     <div className="flex flex-col items-center">
@@ -27,7 +56,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-s"
                                     value="S"
-                                    onClick={(e)=>setPizzaSize(e.target.value)}
+                                    onChange={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Small</label>
                             </span>
@@ -37,7 +66,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-m"
                                     value="M"
-                                    onClick={(e)=>setPizzaSize(e.target.value)}
+                                    onChange={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Medium</label>
                             </span>
@@ -47,7 +76,7 @@ function Order() {
                                     name="pizza-size"
                                     id="pizza-l"
                                     value="L"
-                                    onClick={(e)=>setPizzaSize(e.target.value)}
+                                    onChange={(e)=>setPizzaSize(e.target.value)}
                                 />
                                 <label htmlFor="pizza-s" className="text-lg">Large</label>
                             </span>
@@ -58,12 +87,12 @@ function Order() {
                 <div className="flex flex-row items-center justify-center gap-4 my-4">
                     <div className="flex flex-col items-center justify-center gap-4 bg-gray-100 p-4 rounded-md">
                         <Pizza
-                            name={pizzaType}
-                            image={`/public/pizzas/pepperoni.webp`}
+                            name={selectedPizza?.name}
+                            image={`/public/pizzas/${selectedPizza?.id}.webp`}
                             description="Mozzarella Cheese, Pepperoni"
                         />
                         <p className="text-lg font-bold text-center">Pizza Size: {pizzaSize==="S" ? "Small" : pizzaSize==="M" ? "Medium" : "Large"}</p>
-                        <p className="text-lg font-bold text-center">Total: $10</p>
+                        <p className="text-lg font-bold text-center">Total: {selectedPizza && intl.format(selectedPizza.sizes[pizzaSize]*50)}</p>
                     </div>
                 </div>
             </form>
