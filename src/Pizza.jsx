@@ -8,7 +8,7 @@ function Pizza({ name, image, price, description }) {
       />
       <h2 className="text-xl font-semibold mb-2">{name} </h2>
       <p className="text-gray-600 text-sm mb-2 line-clamp-2 text-ellipsis overflow-hidden">{description}</p>
-      <p className="text-gray-600 text-sm mb-2 font-bold">Price: {price}</p>
+      {price && <p className="text-gray-600 text-sm mb-2 font-bold">Price: {price}</p>}
     </div>
   );
 }

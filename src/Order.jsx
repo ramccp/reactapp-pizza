@@ -24,7 +24,6 @@ function Order() {
 
     async function getData() {
         setLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
         const response = await fetch(`/api/pizzas/`);
         const data = await response.json();
         setPizzas(data);
@@ -41,7 +40,7 @@ function Order() {
             <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
         </div> :  <div className="container mx-auto">
                     <h1 className="text-2xl font-bold text-center">Your Order</h1>
-                    <form className="flex flex-col items-center">
+                    <form className="flex flex-row justify-around items-center w-screen">
                         <div className="flex flex-col items-center justify-center gap-4">
                             <div className="flex flex-col items-center my-4">
                                 <label htmlFor="pizza-type" className="text-lg font-bold">Pizza Type</label>
@@ -95,6 +94,14 @@ function Order() {
                                     price={selectedPizza?.sizes[pizzaSize] * 50}
                                 />
                                 <p className="text-lg font-bold text-center">Pizza Size: {pizzaSize === "S" ? "Small" : pizzaSize === "M" ? "Medium" : "Large"}</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-center justify-center gap-4">
+                            <h1 className="text-2xl font-bold text-center">CART</h1>
+                            <div className="flex flex-col items-center justify-center gap-4">
+                                <p className="text-lg font-bold text-center">Total Price: {intl.format(selectedPizza?.sizes[pizzaSize] * 50)}</p>
+                                <button className="bg-blue-500 text-white p-2 rounded-md cursor-pointer ">Order Pizza</button>
+                                <button className="bg-red-500 text-white p-2 rounded-md cursor-pointer ">Clear Cart</button>
                             </div>
                         </div>
                     </form>
