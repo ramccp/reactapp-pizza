@@ -1,4 +1,8 @@
-function Cart({cart, setCart}) {
+import { useContext } from "react";
+import { CartContext } from "./cart-context";
+
+function Cart({checkOut}) {
+    const {cart, setCart} = useContext(CartContext);
     const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
     const intl = new Intl.NumberFormat("en-IN", {
         style: "currency",
@@ -48,8 +52,8 @@ function Cart({cart, setCart}) {
                     <span className="font-semibold text-gray-700">Total</span>
                     <span className="font-bold text-2xl text-orange-600">{intl.format(totalPrice)}</span>
                 </div>
-                <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0">
-                    Place Order
+                <button onClick={checkOut} className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0">
+                    Proceed to Checkout
                 </button>
             </div>
         </div>
