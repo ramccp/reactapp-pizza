@@ -1,0 +1,151 @@
+import Pizza from "../Pizza";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../cart-context";
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/Order")({
+    component: Order,
+});
+
+const intl = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+});
+
+function Order() {
+    const [pizzaType, setPizzaType] = useState("bbq_ckn");
+    const [pizzaSize, setPizzaSize] = useState("L");
+    const [pizzas, setPizzas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const {cart, setCart} = useContext(CartContext);
+
+    let price, selectedPizza;
+
+    
+
+    if (!loading) {
+        selectedPizza = pizzas.find(pizza => pizza.id === pizzaType);
+        console.log(selectedPizza);
+        price = selectedPizza?.sizes[pizzaSize] * 50;
+    }
+
+    async function getData() {
+        setLoading(true);
+        const response = await fetch(`/api/pizzas/`);
+        const data = await response.json();
+        setPizzas(data);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
+
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        console.log(cart);
+        setCart([...cart, {pizza: selectedPizza, size: pizzaSize,price}]);
+    }
+
+    return (
+        loading ? (
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-200 border-t-orange-600"></div>
+                    <p className="text-gray-600 font-medium">Loading pizzas...</p>
+                </div>
+            </div>
+        ) : (
+            <div className="space-y-12">
+                <div className="text-center">
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Create Your Order</h1>
+                    <p className="text-gray-600">Choose your favorite pizza and size</p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 md:p-8 space-y-8">
+                    <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+                        {/* Order Form Section */}
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label htmlFor="pizza-type" className="block text-sm font-semibold text-gray-700 mb-3">
+                                    Pizza Type
+                                </label>
+                                <select 
+                                    onChange={(e) => setPizzaType(e.target.value)} 
+                                    id="pizza-type" 
+                                    value={pizzaType} 
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 font-medium cursor-pointer transition-all hover:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                                >
+                                    {pizzas.map(obj => (
+                                        <option key={obj.id} value={obj.id}>{obj.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                                    Pizza Size
+                                </label>
+                                <div className="flex gap-4">
+                                    {["S", "M", "L"].map((size) => (
+                                        <label
+                                            key={size}
+                                            className={`flex-1 flex flex-col items-center justify-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                                                pizzaSize === size
+                                                    ? "border-orange-500 bg-orange-50 shadow-md"
+                                                    : "border-gray-200 bg-white hover:border-gray-300"
+                                            }`}
+                                        >
+                                            <input
+                                                type="radio"
+                                                checked={pizzaSize === size}
+                                                name="pizza-size"
+                                                id={`pizza-${size.toLowerCase()}`}
+                                                value={size}
+                                                onChange={(e) => setPizzaSize(e.target.value)}
+                                                className="sr-only"
+                                            />
+                                            <span className={`text-lg font-semibold ${
+                                                pizzaSize === size ? "text-orange-600" : "text-gray-700"
+                                            }`}>
+                                                {size === "S" ? "Small" : size === "M" ? "Medium" : "Large"}
+                                            </span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <button 
+                                type="submit" 
+                                className="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0"
+                            >
+                                Add to Cart
+                            </button>
+                        </div>
+                        
+                        {/* Pizza Preview Section */}
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 w-full max-w-sm shadow-md">
+                                <Pizza
+                                    name={selectedPizza?.name}
+                                    image={selectedPizza?.image}
+                                    description={selectedPizza?.description}
+                                    price={selectedPizza?.sizes[pizzaSize] * 50}
+                                />
+                                <div className="mt-4 pt-4 border-t border-gray-200">
+                                    <p className="text-center text-sm font-medium text-gray-600">
+                                        Size: <span className="text-orange-600 font-bold">{pizzaSize === "S" ? "Small" : pizzaSize === "M" ? "Medium" : "Large"}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
+                
+            </div>
+        )
+    );
+}
+export default Order;

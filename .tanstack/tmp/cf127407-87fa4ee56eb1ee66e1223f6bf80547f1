@@ -1,7 +1,13 @@
-import Pizza from "./Pizza";
+import Pizza from "../Pizza";
 import { useEffect, useState, useContext } from "react";
-import Cart from "./Cart";
-import { CartContext } from "./cart-context";
+import Cart from "../Cart";
+import { CartContext } from "../cart-context";
+import { createRoute, createFileRoute } from "@tanstack/react-router";
+
+export const Route = createRoute("/Order")({
+    path: "/order",
+    component: Order,
+});
 
 const intl = new Intl.NumberFormat("en-IN", {
     style: "currency",
