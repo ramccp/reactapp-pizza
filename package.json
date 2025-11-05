@@ -15,6 +15,7 @@
   "license": "Apache-2.0",
   "description": "The Complete Intro to React v9, as taught by Brian Holt for Frontend Masters",
   "devDependencies": {
+    "@tanstack/router-plugin": "^1.134.12",
     "@vitejs/plugin-react": "4.3.1",
     "eslint": "9.9.1",
     "eslint-config-prettier": "9.1.0",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "@tanstack/react-router": "^1.134.12",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tailwindcss": "^4.1.14"

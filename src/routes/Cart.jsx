@@ -1,9 +1,15 @@
 import { useContext } from "react";
-import { CartContext } from "./cart-context";
+import { CartContext } from "../cart-context";
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/Cart")({
+    component: Cart,
+});
 
 function Cart({checkOut}) {
     const {cart, setCart} = useContext(CartContext);
     const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
+
     const intl = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",

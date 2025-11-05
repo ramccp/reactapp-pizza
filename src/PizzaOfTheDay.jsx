@@ -1,4 +1,5 @@
 import {usePizzaOfTheDay} from "./hooks/usePizzaOfTheDay";
+import { useState, useEffect } from "react";
 import Pizza from "./Pizza";
 
 const intl = new Intl.NumberFormat("en-IN", {
@@ -7,7 +8,18 @@ const intl = new Intl.NumberFormat("en-IN", {
 });
 
 function PizzaOfTheDay() {
-    const { pizzaOfTheDay, loading } = usePizzaOfTheDay();
+    const [pizzaOfTheDay,setPizzaOfTheDay] = useState(null);
+    console.log(pizzaOfTheDay);
+    const [loading,setLoading] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        fetch("/api/pizza-of-the-day")
+        .then(res => res.json())
+        .then(data => setPizzaOfTheDay(data))
+        .catch(err => console.error(err))
+        .finally(() => setLoading(false));
+    }, []);
     
     if (loading) {
         return (
