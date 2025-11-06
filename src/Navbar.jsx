@@ -10,6 +10,7 @@ function Navbar(){
         <div className="flex space-x-4">
           <Link to="/cart">Cart</Link>
           <Link to="/order">Order</Link>
+          <Link to='/past'>Past orders</Link>
         </div>
       </header>
     )

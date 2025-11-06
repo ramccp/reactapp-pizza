@@ -8,21 +8,30 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as OrderRouteImport } from './routes/Order'
-import { Route as CartRouteImport } from './routes/Cart'
 import { Route as IndexRouteImport } from './routes/index'
 
-const OrderRoute = OrderRouteImport.update({
+const PastLazyRouteImport = createFileRoute('/past')()
+const OrderLazyRouteImport = createFileRoute('/Order')()
+const CartLazyRouteImport = createFileRoute('/Cart')()
+
+const PastLazyRoute = PastLazyRouteImport.update({
+  id: '/past',
+  path: '/past',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/past.lazy').then((d) => d.Route))
+const OrderLazyRoute = OrderLazyRouteImport.update({
   id: '/Order',
   path: '/Order',
   getParentRoute: () => rootRouteImport,
-} as any)
-const CartRoute = CartRouteImport.update({
+} as any).lazy(() => import('./routes/Order.lazy').then((d) => d.Route))
+const CartLazyRoute = CartLazyRouteImport.update({
   id: '/Cart',
   path: '/Cart',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any).lazy(() => import('./routes/Cart.lazy').then((d) => d.Route))
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,48 +40,59 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/Cart': typeof CartRoute
-  '/Order': typeof OrderRoute
+  '/Cart': typeof CartLazyRoute
+  '/Order': typeof OrderLazyRoute
+  '/past': typeof PastLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/Cart': typeof CartRoute
-  '/Order': typeof OrderRoute
+  '/Cart': typeof CartLazyRoute
+  '/Order': typeof OrderLazyRoute
+  '/past': typeof PastLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/Cart': typeof CartRoute
-  '/Order': typeof OrderRoute
+  '/Cart': typeof CartLazyRoute
+  '/Order': typeof OrderLazyRoute
+  '/past': typeof PastLazyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Cart' | '/Order'
+  fullPaths: '/' | '/Cart' | '/Order' | '/past'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Cart' | '/Order'
-  id: '__root__' | '/' | '/Cart' | '/Order'
+  to: '/' | '/Cart' | '/Order' | '/past'
+  id: '__root__' | '/' | '/Cart' | '/Order' | '/past'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CartRoute: typeof CartRoute
-  OrderRoute: typeof OrderRoute
+  CartLazyRoute: typeof CartLazyRoute
+  OrderLazyRoute: typeof OrderLazyRoute
+  PastLazyRoute: typeof PastLazyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/past': {
+      id: '/past'
+      path: '/past'
+      fullPath: '/past'
+      preLoaderRoute: typeof PastLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/Order': {
       id: '/Order'
       path: '/Order'
       fullPath: '/Order'
-      preLoaderRoute: typeof OrderRouteImport
+      preLoaderRoute: typeof OrderLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/Cart': {
       id: '/Cart'
       path: '/Cart'
       fullPath: '/Cart'
-      preLoaderRoute: typeof CartRouteImport
+      preLoaderRoute: typeof CartLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,8 +107,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CartRoute: CartRoute,
-  OrderRoute: OrderRoute,
+  CartLazyRoute: CartLazyRoute,
+  OrderLazyRoute: OrderLazyRoute,
+  PastLazyRoute: PastLazyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

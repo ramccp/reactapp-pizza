@@ -2,6 +2,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { CartProvider } from '../cart-context'
 import Navbar from '../Navbar'
 import PizzaOfTheDay from '../PizzaOfTheDay'
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
 
 
 export const Route = createRootRoute({
@@ -10,6 +11,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
     return (
+        <>
         <CartProvider>
             <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 
@@ -22,5 +24,7 @@ function RootComponent() {
                 </main>
             </div>
         </CartProvider>
+        <ReactQueryDevtools />
+        </>
     )
 }

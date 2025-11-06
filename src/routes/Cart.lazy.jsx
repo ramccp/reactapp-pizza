@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { CartContext } from "../cart-context";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
-export const Route = createFileRoute("/Cart")({
+export const Route = createLazyFileRoute("/Cart")({
     component: Cart,
 });
 

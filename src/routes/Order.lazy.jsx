@@ -1,9 +1,9 @@
 import Pizza from "../Pizza";
 import { useEffect, useState, useContext } from "react";
 import { CartContext } from "../cart-context";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/Order")({
+export const Route = createLazyFileRoute("/Order")({
     component: Order,
 });
 
