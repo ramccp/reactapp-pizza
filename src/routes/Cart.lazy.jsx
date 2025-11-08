@@ -1,19 +1,37 @@
 import { useContext } from "react";
 import { CartContext } from "../cart-context";
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 
-export const Route = createFileRoute("/Cart")({
+export const Route = createLazyFileRoute("/Cart")({
     component: Cart,
 });
 
-function Cart({checkOut}) {
+
+
+function Cart() {
     const {cart, setCart} = useContext(CartContext);
     const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
+    const [loading, setLoading] = useState(false);
 
     const intl = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
     });
+    async function checkOut(){
+        setLoading(true);
+        await fetch(`/api/order/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cart: cart,
+            }),
+        });
+        setCart([]);
+        setLoading(false);
+    }
     
     if (cart.length === 0) {
         return (
