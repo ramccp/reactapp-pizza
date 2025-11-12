@@ -49,9 +49,9 @@ function PizzaOfTheDay() {
                 <div className="flex justify-center">
                     <div className="bg-white rounded-2xl p-6 md:p-8 shadow-2xl max-w-md w-full">
                         <Pizza
-                            name={pizzaOfTheDay.name}
-                            image={pizzaOfTheDay.image}
-                            description={pizzaOfTheDay.description}
+                            name={pizzaOfTheDay?.name}
+                            image={pizzaOfTheDay?.image}
+                            description={pizzaOfTheDay?.description}
                         />
                         <div className="mt-6 pt-6 border-t border-gray-200 text-center">
                             <p className="text-sm text-gray-600 mb-1">Starting from</p>
